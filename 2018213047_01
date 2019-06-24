@@ -1,0 +1,174 @@
+# caouse-work
+
+#include<stdio.h>
+#include<string.h>
+#include<time.h>
+#include<stdlib.h>
+void test(int id,char iid[2]);
+void check();
+void fenge(int j);//Declare functions
+int main()
+{
+	int id,i=0,iidd,sw;//Digital ID, Out of Cycle, Alphabet ID Length, Options 
+	char iid[2];//Letter ID 
+	FILE *creat;
+	creat=fopen("record.txt","a+");//Creat a file 
+	fclose(creat);//Close the file
+	do//Input validation(loop) 
+	{
+		puts("Please input your two letter ID no:");
+		scanf("%s",iid);
+		iidd=strlen(iid);
+		puts("Please input your four digit ID no:");
+		scanf("%d",&id);
+		if(id>999&&id<10000&&iid[1]<123&&iid[1]>64&&iid[0]<123&&iid[0]>64&&iidd==2)//Two letter and four number 
+			break;
+		fenge(33);
+		puts("Error:The ID you entered is wrong\nPlease enter ID again");//Error
+		fenge(33);
+	}while(id<1000||id>9999||iidd!=2||iid[1]<65||iid[1]>122||iid[0]<65||iid[0]>122||iidd!=2);
+	do//loop 
+	{
+		fenge(34);
+		puts("Welcome,what would you like to do?");
+		fenge(34);
+		puts("(1)Start a test");
+		puts("(2)Check scores");
+		puts("(3)Exit");
+		scanf("%d",&sw);//Get the option
+		if(sw>0&&sw<4)
+		{
+			printf("You chose %d\n",sw);
+			switch(sw)//select what to do
+			{
+				case 1://Call test function
+				 test(id,iid); 
+				 break;
+				case 2://Call cheak function
+				 check(); 
+				 break;
+				case 3://Break
+				 i=10000;
+				 break;
+			}
+		}
+		else
+			puts("Error,please re-enter your option");//restart
+	}while(i!=10000);//Ending program
+	fenge(9);
+	puts("Good bye!");
+	fenge(9);
+	return 0;
+}
+void test(int id,char iid[2])//Test function 
+{
+	int i,r[10],m1[10],m2[10],st[10],s[10],sc=0;
+	/*Cycle, Random Algorithms, First Number, Second Number, Correct Results, Input Results, Scores*/ 
+	char f[]="n";/*Computational symbols*/ 
+	time_t t1,t2;//Introducing time function
+	FILE *record;//Open the file
+	record=fopen("record.txt","a+");//Adding data to the end of a text file 
+	srand((unsigned)time(NULL));//Resowing
+	fenge(22);
+	puts("Press any key to start");
+	fenge(22);
+	system("pause");//ready
+	t1=time(0);//Start Timing
+	for(i=0;i<10;i++)//Ten question
+	{
+		r[i]=rand()%4;//random +-*/ 
+		if(r[i]==0)//addition
+		{
+			do
+			{
+				m1[i]=rand()%100;m2[i]=rand()%100; 
+				st[i]=m1[i]+m2[i];
+			}while(st[i]>=100);//Less than 100
+			printf("%-2d+%-2d=",m1[i],m2[i]);
+			scanf("%d",&s[i]); 
+			if(s[i]==st[i])
+				sc=sc+10;//Score
+		}
+		if(r[i]==1)//subtraction
+		{
+			do
+			{
+				m1[i]=rand()%100;m2[i]=rand()%100; 
+				st[i]=m1[i]-m2[i];
+			}while(st[i]<0);//More than 0 
+			printf("%-2d-%-2d=",m1[i],m2[i]);
+			scanf("%d",&s[i]); 
+			if(s[i]==st[i])
+				sc=sc+10;//Score
+		}
+		if(r[i]==2)//multiplication
+		{
+			do
+			{
+				m1[i]=rand()%101+1;m2[i]=rand()%101+1; 
+				st[i]=m1[i]*m2[i];
+			}while(st[i]>=100);//Less than 100
+			printf("%-2d*%-2d=",m1[i],m2[i]);
+			scanf("%d",&s[i]); 
+			if(s[i]==st[i])
+				sc=sc+10;//Score
+		}
+		if(r[i]==3)//division 
+		{
+			do
+			{
+				st[i]=rand()%101+1;m2[i]=rand()%101+1; //Less than 100 and not 0 
+				m1[i]=st[i]*m2[i];
+			}while(m1[i]>=100);
+			printf("%-2d/%-2d=",m1[i],m2[i]);
+			scanf("%d",&s[i]); 
+			if(s[i]==st[i])
+				sc=sc+10;//Score
+		}
+	}
+	t2=time(0);//End Timing
+	fenge(31);
+	puts("Review of Examination Questions");//Review
+	fenge(31);
+	puts("Prob.|Correct Answ.|Ur Answ.");
+	for(i=0;i<10;i++)//Print it 
+	{
+		if(r[i]==0)
+		strcpy(f,"+");
+		if(r[i]==1)
+		strcpy(f,"-");
+		if(r[i]==2)
+		strcpy(f,"*");
+		if(r[i]==3)
+		strcpy(f,"/");
+		printf("%-2d%s%-2d|      %-2d     |%      -2d\n",m1[i],f,m2[i],st[i],s[i]); 
+	}
+	fprintf(record,"%c%c%d %d %dseconds\n",iid[0],iid[1],id,sc,t2-t1);//Additional data
+	fclose(record);//Close the file
+	fenge(35);
+	puts("press any key to return to the menu");
+	fenge(35);
+	system("pause");
+}
+void check()//Cheak function
+{
+	char c;
+	FILE *record;//Open the file
+	record=fopen("record.txt","r");//Read the file
+	fenge(26);
+	puts("Your previous records are:");
+	while(fscanf(record,"%c",&c)!=EOF) //Read and print
+		printf("%c",c);
+	fclose(record);//Close the file
+	fenge(35);
+	puts("press any key to return to the menu");
+	fenge(35);
+	system("pause");
+}
+void fenge(int j)//Partition line
+{
+	int i;
+	for(i=0;i<j;i++)
+		printf("-");
+	puts("");
+}
